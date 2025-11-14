@@ -5,11 +5,11 @@ ii) Group Class Registration
 iii)Profile Management
 iv) Dashboard
 v) Health History
-
+vi) PT Session scheduling
 For Trainer,
 i) Set Availibility
 ii) Member Lookup
-
+iii) Schedule view
 For Admin,
 i) Room Booking
 ii) Claas Management
