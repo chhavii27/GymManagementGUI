@@ -28,10 +28,16 @@ public class MemberClassDAO {
         }
     }
 
-    // Read: get one MemberClass by id (surrogate PK)
-    public MemberClass getMemberClassById(Long id) {
+    // Read: get one MemberClass by composite key (member + class)
+    public MemberClass getMemberClass(Member member, ClassEntity gymClass) {
         try (Session session = sessionFactory.openSession()) {
-            return session.get(MemberClass.class, id);
+            Query<MemberClass> query = session.createQuery(
+                    "FROM MemberClass mc WHERE mc.member = :member AND mc.gymClass = :gymClass",
+                    MemberClass.class
+            );
+            query.setParameter("member", member);
+            query.setParameter("gymClass", gymClass);
+            return query.uniqueResult();
         }
     }
 
@@ -47,7 +53,7 @@ public class MemberClassDAO {
         }
     }
 
-    // Optional: get registrations for a given class (who is in a class)
+    // Read: all registrations for a given class (who is in a class)
     public List<MemberClass> getMemberClassesByClass(ClassEntity gymClass) {
         try (Session session = sessionFactory.openSession()) {
             Query<MemberClass> query = session.createQuery(
@@ -59,7 +65,7 @@ public class MemberClassDAO {
         }
     }
 
-    // Optional: unregister a member from a class
+    // Delete: unregister a member from a class using the entity
     public void deleteMemberClass(MemberClass memberClass) {
         Transaction tx = null;
         try (Session session = sessionFactory.openSession()) {
@@ -69,6 +75,14 @@ public class MemberClassDAO {
         } catch (Exception e) {
             if (tx != null) tx.rollback();
             e.printStackTrace();
+        }
+    }
+
+    // Convenience: unregister by member + class
+    public void deleteMemberClass(Member member, ClassEntity gymClass) {
+        MemberClass mc = getMemberClass(member, gymClass);
+        if (mc != null) {
+            deleteMemberClass(mc);
         }
     }
 }
