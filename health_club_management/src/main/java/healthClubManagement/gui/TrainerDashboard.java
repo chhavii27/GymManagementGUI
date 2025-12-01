@@ -596,6 +596,7 @@ public class TrainerDashboard extends JFrame {
                 return;
             }
 
+            //inputs query to search a member
             try (Session session = HibernateUtil.getSessionFactory().openSession()) {
                 Query<Member> query = session.createQuery(
                         "FROM Member WHERE LOWER(firstName) LIKE :name OR LOWER(lastName) LIKE :name",
@@ -612,6 +613,7 @@ public class TrainerDashboard extends JFrame {
                 StringBuilder result = new StringBuilder();
                 result.append("Found ").append(members.size()).append(" member(s):\n\n");
 
+                //uses MemberDAO getters and setters to show member data
                 for (Member m : members) {
                     result.append("═══════════════════════════════════════════\n");
                     result.append("📋 MEMBER PROFILE\n");
@@ -636,7 +638,7 @@ public class TrainerDashboard extends JFrame {
                         result.append("No fitness goals set.\n\n");
                     } else {
                         for (FitnessGoal g : goals) {
-                            result.append("• ").append(g.getGoalType()).append(": ")
+                            result.append("• ").append(g.getGoalType()).append(": ") // gets it's fitness goal
                                     .append(g.getValue()).append(" (Deadline: ")
                                     .append(g.getDeadline()).append(")\n");
                         }
